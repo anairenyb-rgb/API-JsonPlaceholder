@@ -497,7 +497,7 @@ GET {{baseUrl}}/posts/999
 - Status `404`
 - Resposta `{}`
 
-### Atualização com tipos de dados inválidos
+### Envio de dados com tipo diferente do esperado
 
 Exemplo:
 
