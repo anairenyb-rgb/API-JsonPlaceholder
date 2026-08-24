@@ -1,0 +1,2302 @@
+{
+  "info": {
+    "_postman_id": "86a9f97a-26a4-48d7-8712-6bd6de5b99c9",
+    "name": "JsonPlaceholder API Testes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53156711",
+    "_collection_link": "https://go.postman.co/collection/53156711-86a9f97a-26a4-48d7-8712-6bd6de5b99c9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Albums",
+      "item": [
+        {
+          "name": "Cenário negativo",
+          "item": [
+            {
+              "name": "GET - Album de Id Inexistente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Código de status é 404\", function(){\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "})\r",
+                      "\r",
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                      "    pm.expect(response).to.eql({});\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/albums/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "albums",
+                    "999"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GET - Buscar todos os albuns",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function (){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.a(\"array\");\r",
+                  "})\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém 100 registros\", function(){\r",
+                  "    pm.expect(response).to.have.lengthOf(100);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    response.forEach(album => {\r",
+                  "        pm.expect(album).to.have.property(\"userId\");\r",
+                  "        pm.expect(album).to.have.property(\"id\");\r",
+                  "        pm.expect(album).to.have.property(\"title\");\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tresponse.forEach(album => {\r",
+                  "\t\tpm.expect(album.userId).to.be.a('number');\r",
+                  "\t\tpm.expect(album.id).to.be.a('number');\r",
+                  "\t\tpm.expect(album.title).to.be.a('string');\r",
+                  "\t})\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/albums",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "albums"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar albuns",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.userId).to.be.a('number');\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.title).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo Title não está vazio\", function(){\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"Não é um Lorem Ipsum\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/albums",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "albums"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar album",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "\tpm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "\tpm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tpm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.userId).to.be.a('number');\r",
+                  "    pm.expect(response.title).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo Title não está vazio\", function(){\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"Verifica se o título foi atualizado\", function(){\r",
+                  "    pm.expect(response.title).to.equal(requestBody.title);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Lorem ipsum dolor sit amet.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/albums/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "albums",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir album",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function (){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "    pm.expect(response).to.eql({});\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/albums/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "albums",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "GET - Buscar todos os comentarios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function (){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function (){\r",
+                  "    pm.expect(response).to.be.a('array');\r",
+                  "})\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    response.forEach(comment => {\r",
+                  "        pm.expect(comment).to.have.property('postId');\r",
+                  "        pm.expect(comment).to.have.property('id');\r",
+                  "        pm.expect(comment).to.have.property('name');\r",
+                  "        pm.expect(comment).to.have.property('email');\r",
+                  "        pm.expect(comment).to.have.property('body');\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    response.forEach(comment => {\r",
+                  "        pm.expect(comment.postId).to.be.a('number');\r",
+                  "        pm.expect(comment.id).to.be.a('number');\r",
+                  "        pm.expect(comment.name).to.be.a('string');\r",
+                  "        pm.expect(comment.email).to.be.a('string');\r",
+                  "        pm.expect(comment.body).to.be.a('string');\r",
+                  "    })\r",
+                  "\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Buscar todos comentários por postagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém pelo menos um comentário\", function(){\r",
+                  "\tpm.expect(response).to.be.an('array').that.is.not.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "\tresponse.forEach(comment =>{\r",
+                  "\t\tpm.expect(comment).to.have.property('postId');\r",
+                  "\t\tpm.expect(comment).to.have.property('id');\r",
+                  "\t\tpm.expect(comment).to.have.property('name');\r",
+                  "\t\tpm.expect(comment).to.have.property('email');\r",
+                  "\t\tpm.expect(comment).to.have.property('body');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tresponse.forEach(comment =>{\r",
+                  "\t\tpm.expect(comment.postId).to.be.a('number');\r",
+                  "        pm.expect(comment.id).to.be.a('number');\r",
+                  "        pm.expect(comment.name).to.be.a('string');\r",
+                  "        pm.expect(comment.email).to.be.a('string');\r",
+                  "        pm.expect(comment.body).to.be.a('string');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function(){\r",
+                  "    response.forEach(comment =>{\r",
+                  "        pm.expect(comment.name.trim()).to.not.be.empty;\r",
+                  "        pm.expect(comment.email.trim()).to.not.be.empty;\r",
+                  "        pm.expect(comment.body.trim()).to.not.be.empty;\r",
+                  "    })\r",
+                  "})\r",
+                  "pm.test(\"Email é válido\", function(){\r",
+                  "\tpm.expect(response[0].email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+                  "})\r",
+                  "const postId = Number(pm.variables.get('postId'));\r",
+                  "\r",
+                  "pm.test(\"Todos os comentários pertencem ao postId informado\", function () {\r",
+                  "    response.forEach(comment => {\r",
+                  "        pm.expect(comment.postId);\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments/?postId={{postId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "postId",
+                  "value": "{{postId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar comentario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "\tpm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\t\tpm.expect(response.postId).to.be.a('number');\r",
+                  "        pm.expect(response.id).to.be.a('number');\r",
+                  "        pm.expect(response.name).to.be.a('string');\r",
+                  "        pm.expect(response.email).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function(){\r",
+                  "    pm.expect(response.name.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.email.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.body.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"postId\": {{postId}},\r\n\t\"name\":\"Lorem ipsum dolor sit amet.\",\r\n\t\"email\": \"teste@teste.com\",\r\n\t\"body\": \"Qui aliquid voluptate ut illo omnis et nobis delectus eos rerum corporis sed perspiciatis dolorem ut magnam magni qui eius exercitationem.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar um determinado comentario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "\tpm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tpm.expect(response.id).to.be.a('number');\r",
+                  "\tpm.expect(response.postId).to.be.a('number');\r",
+                  "\tpm.expect(response.name).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo Name não está vazio\", function () {\r",
+                  "    pm.expect(response.name.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"Verifica se o campo 'name' foi atualizado\", function(){\r",
+                  "\tpm.expect(response.name).to.equal(requestBody.name);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Ut unde pariatur ut nihil dolores\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comments/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir comentario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function (){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "    pm.expect(response).to.eql({});\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Ut unde pariatur ut nihil dolores\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comments/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": [
+        {
+          "name": "GET - Buscar todas  as fotos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "\tresponse.forEach(photos =>{\r",
+                  "\t\tpm.expect(photos).to.have.property('albumId');\r",
+                  "\t\tpm.expect(photos).to.have.property('id');\r",
+                  "\t\tpm.expect(photos).to.have.property('title');\r",
+                  "\t\tpm.expect(photos).to.have.property('url');\r",
+                  "\t\tpm.expect(photos).to.have.property('thumbnailUrl');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tresponse.forEach(photos =>{\r",
+                  "\t\tpm.expect(photos.albumId).to.be.a('number');\r",
+                  "\t\tpm.expect(photos.id).to.be.a('number');\r",
+                  "\t\tpm.expect(photos.title).to.be.a('string');\r",
+                  "\t\tpm.expect(photos.url).to.be.a('string');\r",
+                  "\t\tpm.expect(photos.thumbnailUrl).to.be.a('string');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém 5000 registros\", function(){\r",
+                  "\tpm.expect(response).to.have.lengthOf(5000);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/photos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "photos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar fotos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.a('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.albumId).to.be.a('number');\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.title).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo Title não está vazio\", function(){\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"albumId\": {{albumId}},\r\n    \"title\": \"Nemo enim ipsam voluptatem, quia voluptas sit\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/photos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "photos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar fotos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.albumId).to.be.a('number');\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.title).to.be.a('string');\r",
+                  "    pm.expect(response.url).to.be.a('string');\r",
+                  "    pm.expect(response.thumbnailUrl).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function(){\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.url.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.thumbnailUrl.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"Verifica se o campo Title foi atualizado corretamente\", function(){\r",
+                  "\tpm.expect(response.title).to.equal(requestBody.title);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Lorem ips dolor sit amet, consectetur adipisci elit\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/photos/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "photos",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir fotos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function (){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "    pm.expect(response).to.eql({});\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/photos/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "photos",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Cenário negativo",
+          "item": [
+            {
+              "name": "GET - Usuário inválido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Código de status é 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});\r",
+                      "\r",
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Resposta é um objeto\", function () {\r",
+                      "    pm.expect(response).to.be.an(\"object\");\r",
+                      "})\r",
+                      "pm.test(\"Resposta é um objeto vazio\", function () {\r",
+                      "    pm.expect(response).to.eql({})\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/user/2",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GET - Buscar todos os usuários",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function (){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    response.forEach(user =>{\r",
+                  "        pm.expect(user).to.have.all.keys('id', 'name', 'username', 'email', 'address', 'phone', 'website', 'company');\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function () {\r",
+                  "    response.forEach(user => {\r",
+                  "        pm.expect(user.id).to.be.a('number');\r",
+                  "        pm.expect(user.name).to.be.a('string');\r",
+                  "        pm.expect(user.username).to.be.a('string');\r",
+                  "        pm.expect(user.email).to.be.a('string');  \r",
+                  "        pm.expect(user.phone).to.be.a('string');\r",
+                  "        pm.expect(user.website).to.be.a('string');\r",
+                  "   })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos address é um objeto\", function(){\r",
+                  "    response.forEach(user =>{\r",
+                  "        pm.expect(user.address).to.be.a('object');\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Address contém os campos esperados\", function(){\r",
+                  "    response.forEach(user =>{\r",
+                  "        pm.expect(user.address).to.have.all.keys(\r",
+                  "            'street', 'suite', 'city', 'zipcode', 'geo'\r",
+                  "        );\r",
+                  "    });\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos Geo é um objeto\", function(){\r",
+                  "    response.forEach(user => {\r",
+                  "        pm.expect(user.address.geo).to.be.a('object');\r",
+                  "    });\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Geo contém os campos esperados\", function(){\r",
+                  "    response.forEach(user =>{\r",
+                  "        pm.expect(user.address.geo).to.have.all.keys(\r",
+                  "            'lat', 'lng' \r",
+                  "        );\r",
+                  "    });\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Email é válido\", function(){\r",
+                  "    response.forEach(user => {\r",
+                  "         pm.expect(user.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);\r",
+                  "    }); \r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém 10 registros\", function (){\r",
+                  "    pm.expect(pm.response.json().length).to.equal(10);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Buscar usuário por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.a('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    pm.expect(response).to.have.keys('id', 'name', 'username', 'email', 'address', 'phone', 'website', 'company');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.name).to.be.a('string');\r",
+                  "    pm.expect(response.username).to.be.a('string');\r",
+                  "    pm.expect(response.email).to.be.a('string');\r",
+                  "    pm.expect(response.phone).to.be.a('string');\r",
+                  "    pm.expect(response.website).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo address é um objeto\", function(){\r",
+                  "    pm.expect(response.address).to.be.a('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Address contém os campos esperados\", function(){\r",
+                  "    pm.expect(response.address).to.have.all.keys(\r",
+                  "            'street', 'suite', 'city', 'zipcode', 'geo'\r",
+                  "        );\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo Geo é um objeto\", function(){\r",
+                  "    pm.expect(response.address.geo).to.be.a('object');\r",
+                  "})\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Geo contém os campos esperados\", function(){\r",
+                  "    pm.expect(response.address.geo).to.have.all.keys(\r",
+                  "            'lat', 'lng' \r",
+                  "        );\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo company é um objeto\", function () {\r",
+                  "    pm.expect(response.company).to.be.a('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Company possui os campos esperados\", function(){\r",
+                  "    pm.expect(response.company).to.have.all.keys(\r",
+                  "        'name', 'catchPhrase', 'bs'\r",
+                  "    );\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Email é válido\", function(){\r",
+                  "    pm.expect(response.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);\r",
+                  "})\r",
+                  "\r",
+                  "const expectId = Number(pm.variables.get(\"id\"));\r",
+                  "\r",
+                  "pm.test(\"ID é igual ao valor da variável\", function(){\r",
+                  "    pm.expect(response.id).to.equal(expectId);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"ID foi gerado\", function(){\r",
+                  "    pm.expect(response.id).to.exist;\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "})\r",
+                  "\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"O nome no corpo da requisição é o mesmo que no corpo da resposta\", function(){\r",
+                  "    pm.expect(response.name).to.equal(requestBody.name);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"O username no corpo da requisição é o mesmo que no corpo da resposta\", function(){\r",
+                  "    pm.expect(response.username).to.equal(requestBody.username);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"O email no corpo da requisição é o mesmo que no corpo da resposta\", function(){\r",
+                  "    pm.expect(response.email).to.equal(requestBody.email);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function () {\r",
+                  "    pm.expect(response).to.have.all.keys('id','name', 'username', 'email');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.name).to.be.a('string');\r",
+                  "    pm.expect(response.username).to.be.a('string');\r",
+                  "    pm.expect(response.email).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function(){\r",
+                  "    pm.expect(response.name.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.username.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.email.trim()).to.not.be.empty;\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n    \"name\": \"João Silva\",\r\n    \"username\": \"joaosilva\",\r\n    \"email\": \"joao.silva@example.com\"\r\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Atualizar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "\tpm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "const expectId = Number(pm.variables.get(\"id\"));\r",
+                  "\r",
+                  "pm.test(`ID retornado corresponde ao ID informado ${expectId}`, function(){\r",
+                  "    pm.expect(response.id).to.equal(expectId);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "   pm.expect(response).to.have.all.keys(\"id\", \"name\", \"username\", \"email\");\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.id).to.be.a(\"number\");\r",
+                  "    pm.expect(response.name).to.be.a(\"string\");\r",
+                  "    pm.expect(response.username).to.be.a(\"string\");\r",
+                  "    pm.expect(response.email).to.be.a(\"string\");\r",
+                  "})\r",
+                  "\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"Campo name foi atualizado\", function () {\r",
+                  "    pm.expect(response.name).to.equal(requestBody.name);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo username foi atualizado\", function () {\r",
+                  "    pm.expect(response.username).to.equal(requestBody.username);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campo email foi atualizado\", function () {\r",
+                  "    pm.expect(response.email).to.equal(requestBody.email);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Email é válido\", function () {\r",
+                  "    pm.expect(response.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{   \r\n    \"name\": \"Joana Silva\",\r\n    \"username\": \"Joana\",\r\n    \"email\": \"joaninha@april.biz\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar parcialmente usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    pm.expect(response).to.have.all.keys('id', 'name', 'username', 'email', 'address', 'phone', 'website', 'company')\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    pm.expect(response.name).to.be.a(\"string\");\r",
+                  "    pm.expect(response.username).to.be.a(\"string\");\r",
+                  "    pm.expect(response.email).to.be.a(\"string\");\r",
+                  "    pm.expect(response.address).to.be.a(\"object\");\r",
+                  "    pm.expect(response.phone).to.be.a(\"string\");\r",
+                  "    pm.expect(response.website).to.be.a(\"string\");\r",
+                  "    pm.expect(response.company).to.be.a(\"object\");   \r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Address possui os campos esperados\", function () {\r",
+                  "    pm.expect(response.address).to.have.all.keys('street', 'suite', 'city', 'zipcode', 'geo');\r",
+                  "    pm.expect(response.address.geo).to.have.all.keys('lat', 'lng');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Company possui os campos esperado\", function () {\r",
+                  "    pm.expect(response.company).to.have.all.keys('name', 'catchPhrase', 'bs');\r",
+                  "})\r",
+                  "\r",
+                  "const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "pm.test(\"Campo email foi atualizado\", function(){\r",
+                  "    pm.expect(response.email).to.equal(requestBody.email);\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Email é válido\", function(){\r",
+                  "\tpm.expect(response.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\r\n        \"email\": \"leanne.graham@april.biz\"\r\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "\tpm.expect(response).to.eql({});\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Cenário negativo",
+          "item": [
+            {
+              "name": "GET - ID inexistente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Código de status é 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "})\r",
+                      "\r",
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Resposta é um objeto\", function () {\r",
+                      "    pm.expect(response).to.be.an('object');\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Resposta deve ser um objeto vazio\", function () {\r",
+                      "    pm.expect(response).to.eql({});\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/posts/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "999"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Atualizar com tipo de dado invalido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Campos possuem o tipo correto\", function () {\r",
+                      "    pm.expect(response.userId).to.be.a(\"number\");\r",
+                      "    pm.expect(response.id).to.be.a(\"number\");\r",
+                      "    pm.expect(response.title).to.be.a(\"string\");\r",
+                      "    pm.expect(response.body).to.be.a(\"string\");\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Campos não estão vazios\", function () {\r",
+                      "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": 1,\r\n    \"title\": 12345,\r\n    \"body\": \"De fato, inserir qualquer texto de fantasia ou um texto famoso, seja um poema, um discurso, uma passagem literária, o texto de uma música, etc., nosso gerador de texto fornecerá a extração aleatória de termos e etapas para compor o seu exclusivo Lorem Ipsum\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/posts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GET - Buscar todas postagens",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.a(\"array\");\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta não está vazia\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    response.forEach(post => {\r",
+                  "        pm.expect(post).to.have.all.keys('userId', 'id', 'title', 'body');\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    response.forEach(post =>{\r",
+                  "        pm.expect(post.userId).to.be.a('number');\r",
+                  "        pm.expect(post.id).to.be.a('number');\r",
+                  "        pm.expect(post.title).to.be.a('string');\r",
+                  "        pm.expect(post.body).to.be.a('string');\r",
+                  "    });\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém 100 registros\", function(){\r",
+                  "\tpm.expect(response.length).to.equal(100);\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Buscar todas as postagem por usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém pelo menos uma postagem\", function(){\r",
+                  "    pm.expect(response).to.be.an('array').that.is.not.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "    response.forEach(post =>{\r",
+                  "        pm.expect(post).to.have.property('userId');\r",
+                  "\t\tpm.expect(post).to.have.property('id');\r",
+                  "\t\tpm.expect(post).to.have.property('title');\r",
+                  "\t\tpm.expect(post).to.have.property('body');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "    response.forEach(post =>{\r",
+                  "        pm.expect(post.userId).to.be.a('number');\r",
+                  "        pm.expect(post.id).to.be.a('number');\r",
+                  "        pm.expect(post.title).to.be.a('string');\r",
+                  "        pm.expect(post.body).to.be.a('string');\r",
+                  "    })\r",
+                  "})\r",
+                  "const userId = Number(pm.variables.get(\"userId\"));\r",
+                  "\r",
+                  "pm.test(`Todas as postagens pertencem ao usuário ${userId}`, function(){\r",
+                  "    response.forEach(post =>{\r",
+                  "        pm.expect(post.userId).to.equal(userId);\r",
+                  "    })\r",
+                  "})\r",
+                  "\r",
+                  "const schema = {\r",
+                  "    \"type\": \"array\",\r",
+                  "    \"items\": {\r",
+                  "        \"type\": \"object\",\r",
+                  "        \"required\": [\"userId\", \"id\", \"title\", \"body\"],\r",
+                  "        \"properties\": {\r",
+                  "            userId:{type:\"integer\"},\r",
+                  "            id:{type:\"integer\"},\r",
+                  "            title:{type:\"string\"},\r",
+                  "            body:{type:\"string\"}\r",
+                  "        }\r",
+                  "    }\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Resposta está em conformidade com o jsonSchema\", function(){\r",
+                  "   pm.response.to.have.jsonSchema(schema);\r",
+                  "})\r",
+                  "\r",
+                  "const post = response.find(post => post.id === 5);\r",
+                  "\r",
+                  "pm.test(\"Postagem de ID 5 encontrada\", function(){\r",
+                  "\tpm.expect(post).to.exist;\r",
+                  "})\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"oldTitle\", post.title);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/?userId={{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar postagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function () {\r",
+                  "    pm.expect(response.userId).to.be.a(\"number\");\r",
+                  "    pm.expect(response.id).to.be.a(\"number\");\r",
+                  "    pm.expect(response.title).to.be.a(\"string\");\r",
+                  "    pm.expect(response.body).to.be.a(\"string\");\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function () {\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.body.trim()).to.not.be.empty;\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"Não é um Lorem Ipsum\",\r\n    \"body\": \"De fato, inserir qualquer texto de fantasia ou um texto famoso, seja um poema, um discurso, uma passagem literária, o texto de uma música, etc., nosso gerador de texto fornecerá a extração aleatória de termos e etapas para compor o seu exclusivo Lorem Ipsum\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar postagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function () {\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "\tpm.expect(response.userId).to.exist;\r",
+                  "\tpm.expect(response.title).to.exist;\r",
+                  "    pm.expect(response.body).to.exist;\r",
+                  "    pm.expect(response.id).to.exist;\r",
+                  " })\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function () {\r",
+                  "    pm.expect(response.userId).to.be.a('number');\r",
+                  "    pm.expect(response.id).to.be.a('number');\r",
+                  "    pm.expect(response.title).to.be.a('string');\r",
+                  "    pm.expect(response.body).to.be.a('string');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos não estão vazios\", function(){\r",
+                  "    pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "    pm.expect(response.body.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Retorna a postagem de ID 5\", function(){\r",
+                  "    pm.expect(response.id).to.equal(5);\r",
+                  "})\r",
+                  "\r",
+                  "const userId = Number(pm.variables.get(\"userId\"));\r",
+                  "\r",
+                  "pm.test(`Postagem pertence ao usuário ${userId}`, function(){\r",
+                  "    pm.expect(response.userId).to.equal(userId);\r",
+                  "})\r",
+                  "//Recupera o título salvo na requisição GET\r",
+                  "const oldTitle = pm.collectionVariables.get('oldTitle');\r",
+                  "\r",
+                  "pm.test(\"O título antigo existe\", function(){\r",
+                  "    pm.expect(oldTitle).to.exist;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"O título foi alterado\", function(){\r",
+                  "    pm.expect(response.title).to.not.equal(oldTitle);\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"They don't know which ones they hate.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir postagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta retorna um objeto\", function () {\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "\tpm.expect(response).to.eql({});\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos",
+      "item": [
+        {
+          "name": "GET - Buscar todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function(){\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta não está vazia\", function () {\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "\tresponse.forEach(todos =>{\r",
+                  "\t\tpm.expect(todos).to.have.property('userId');\r",
+                  "\t\tpm.expect(todos).to.have.property('id');\r",
+                  "\t\tpm.expect(todos).to.have.property('title');\r",
+                  "\t\tpm.expect(todos).to.have.property('completed');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tresponse.forEach(todos =>{\r",
+                  "\t\tpm.expect(todos.userId).to.be.a('number');\r",
+                  "\t\tpm.expect(todos.id).to.be.a('number');\r",
+                  "\t\tpm.expect(todos.title).to.be.a('string');\r",
+                  "\t\tpm.expect(todos.completed).to.be.a('boolean');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Resposta contém 200 registros\", function(){\r",
+                  "\tpm.expect(response).to.have.lengthOf(200);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/todos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "todos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Buscar todos por status de conclusão",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um array\", function () {\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta contém pelo menos um item\", function(){\r",
+                  "    pm.expect(response).to.not.be.empty;\r",
+                  "})\r",
+                  "pm.test(\"Resposta contém os campos esperados\", function(){\r",
+                  "\tresponse.forEach(todos =>{\r",
+                  "\t\tpm.expect(todos).to.have.property('userId');\r",
+                  "\t\tpm.expect(todos).to.have.property('id');\r",
+                  "\t\tpm.expect(todos).to.have.property('title');\r",
+                  "\t\tpm.expect(todos).to.have.property('completed');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){\r",
+                  "\tresponse.forEach(todos =>{\r",
+                  "\t\tpm.expect(todos.userId).to.be.a('number');\r",
+                  "\t\tpm.expect(todos.id).to.be.a('number');\r",
+                  "\t\tpm.expect(todos.title).to.be.a('string');\r",
+                  "\t\tpm.expect(todos.completed).to.be.a('boolean');\r",
+                  "\t})\r",
+                  "})\r",
+                  "\r",
+                  "const completed = pm.variables.get('completed') === \"true\";\r",
+                  "\r",
+                  "pm.test(`Todos os registros possuem status completed = ${completed}`, function () {\r",
+                  "    response.forEach(todos =>{\r",
+                  "\t\t\tpm.expect(todos.completed).to.equal(completed);\r",
+                  "\t\t})\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/todos?completed={{completed}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "todos"
+              ],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "{{completed}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Criar todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 201\", function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto\", function(){\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Campos possuem o tipo correto\", function () {\r",
+                  "    pm.expect(response.userId).to.be.a(\"number\");\r",
+                  "    pm.expect(response.id).to.be.a(\"number\");\r",
+                  "    pm.expect(response.title).to.be.a(\"string\");  \r",
+                  "    pm.expect(response.completed).to.be.a('boolean');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Campo Title não está vazio\", function(){\r",
+                  "   pm.expect(response.title.trim()).to.not.be.empty;\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"userId\": {{userId}},\r\n\t\"title\": \"Tampouco há alguém que ame, busque ou deseje obter dor de si mesmo\",\r\n\t\"completed\":true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/todos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "todos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH - Atualizar todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "})",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Resposta é um objeto\", function(){",
+                  "    pm.expect(response).to.be.an('object');",
+                  "})",
+                  "",
+                  "pm.test(\"Resposta contém os campos obrigatórios\", function(){",
+                  "    pm.expect(response).to.have.all.keys('userId', 'id', 'title', 'completed');",
+                  "})",
+                  "",
+                  "pm.test(\"Campos possuem o tipo correto\", function(){",
+                  "\tpm.expect(response.userId).to.be.a('number');",
+                  "\tpm.expect(response.id).to.be.a('number');",
+                  "\tpm.expect(response.title).to.be.a('string');",
+                  "\tpm.expect(response.completed).to.be.a('boolean');",
+                  "})",
+                  "",
+                  "pm.test(\"Campo Title não está vazio\", function(){",
+                  "    pm.expect(response.title).to.not.be.empty;",
+                  "})",
+                  "",
+                  "const requestBody = JSON.parse(pm.request.body.raw);",
+                  "",
+                  "pm.test(\"Campos atualizados corretamente\", function(){",
+                  "\tpm.expect(response.title).to.equal(requestBody.title);",
+                  "\tpm.expect(response.completed).to.equal(requestBody.completed);",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Ut eaque dolorem qui atque omnis aut veniam voluptatum.\",\r\n    \"completed\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/todos/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "todos",
+                "{{id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Excluir todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Código de status é 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Resposta retorna um objeto\", function () {\r",
+                  "    pm.expect(response).to.be.an('object');\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Resposta é um objeto vazio\", function(){\r",
+                  "\tpm.expect(response).to.eql({});\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/todos/{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "todos",
+                "{id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Tempo de resposta é menor que 1000ms\", function (){\r",
+          "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+          "})\r",
+          "\r",
+          "pm.test(\"Content-Type é application/json\", function (){\r",
+          "    if(pm.response.code != 204){\r",
+          "        pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+          "        .to.include(\"application/json\");\r",
+          "    }\r",
+          "})"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "id",
+      "value": "1"
+    },
+    {
+      "key": "postId",
+      "value": "1"
+    },
+    {
+      "key": "albumId",
+      "value": "1"
+    },
+    {
+      "key": "userId",
+      "value": "1"
+    },
+    {
+      "key": "oldTitle",
+      "value": "false"
+    },
+    {
+      "key": "completed",
+      "value": "false"
+    }
+  ]
+}
